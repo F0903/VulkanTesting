@@ -1,8 +1,15 @@
 module;
 #include <iostream>
 
+#ifdef _WIN32
+#include <wtypes.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#endif
+
 #define GLFW_INCLUDE_VULKAN
 #include "vendor/include/GLFW/glfw3.h"
+#include "vendor/include/GLFW/glfw3native.h"
+
 
 export module GLFW;
 
@@ -17,13 +24,12 @@ private:
 		{
 			std::cerr << "Could not init GLFW\n";
 		}
-
-		if (!glfwVulkanSupported())
-		{
-			std::cerr << "Vulkan was not found by GLFW\n";
-		}
-
 		//auto err = glfwCreateWindowSurface();
+	}
+
+	void Terminate()
+	{
+		glfwTerminate();
 	}
 
 public:
@@ -34,15 +40,10 @@ public:
 	
 	~GLFWVulkan()
 	{
-		glfwTerminate();
+		Terminate();
 	}
 
-	void Terminate()
-	{
-		glfwTerminate();
-	}
-
-	WindowHandle CreateWindow(const char* title, int sizeX = 600, int sizeY = 420) const
+	WindowHandle MakeWindow(const char* title, int sizeX = 600, int sizeY = 420) const
 	{
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		WindowHandle window = glfwCreateWindow(sizeX, sizeY, title, NULL, NULL);
@@ -77,4 +78,8 @@ public:
 	{
 		glfwPollEvents();
 	}
+
+	HWND GetWin32Handle(WindowHandle handle) const { return glfwGetWin32Window((GLFWwindow*)handle); }
+
+	const char** GetRequiredVulkanExtensions(uint32_t* count) const { return glfwGetRequiredInstanceExtensions(count); }
 };
