@@ -10,7 +10,6 @@ module;
 #include "vendor/vulkan/vulkan_win32.h"
 #endif
 
-
 export module Vulkan;
 
 export struct VulkanWinSurfaceInfo
@@ -93,7 +92,7 @@ private:
 			}
 
 			VkBool32 presentSupport = false;
-			vkGetPhysicalDeviceSurfaceSupportKHR(currentGpu, i, surface, &presentSupport);
+			vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
 			if (presentSupport)
 				indecies.presentFamily = i;
 			++i;
