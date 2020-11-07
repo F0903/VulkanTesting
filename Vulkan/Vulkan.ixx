@@ -58,6 +58,7 @@ private:
 		createInfo.hwnd = surfInfo.windowHandle;
 		createInfo.hinstance = GetModuleHandle(NULL);
 
+
 		if (vkCreateWin32SurfaceKHR(vk, &createInfo, NULL, &surface) != VkResult::VK_SUCCESS)
 		{
 			std::cout << "Error whilst creating a win32 surface.\n";
